@@ -1,3 +1,4 @@
+/* We do not modify RSTRING in this file, so RSTRING_MODIFIED is not needed */
 #include "kgio.h"
 #include "my_fileno.h"
 #include "sock_for_fd.h"
@@ -67,7 +68,8 @@ retry:
 }
 
 static VALUE
-my_connect(VALUE klass, int io_wait, int domain, void *addr, socklen_t addrlen)
+my_connect(VALUE klass, int io_wait, int domain,
+	const void *addr, socklen_t addrlen)
 {
 	int fd = my_socket(domain);
 
@@ -133,11 +135,11 @@ static VALUE tcp_connect(VALUE klass, VALUE ip, VALUE port, int io_wait)
 	                  &addr, hints.ai_addrlen);
 }
 
-static struct sockaddr *sockaddr_from(socklen_t *addrlen, VALUE addr)
+static const struct sockaddr *sockaddr_from(socklen_t *addrlen, VALUE addr)
 {
 	if (TYPE(addr) == T_STRING) {
 		*addrlen = (socklen_t)RSTRING_LEN(addr);
-		return (struct sockaddr *)(RSTRING_PTR(addr));
+		return (const struct sockaddr *)(RSTRING_PTR(addr));
 	}
 	rb_raise(rb_eTypeError, "invalid address");
 	return NULL;
@@ -149,9 +151,9 @@ static struct sockaddr *sockaddr_from(socklen_t *addrlen, VALUE addr)
 #endif
 struct tfo_args {
 	int fd;
-	void *buf;
+	const void *buf;
 	size_t buflen;
-	struct sockaddr *addr;
+	const struct sockaddr *addr;
 	socklen_t addrlen;
 };
 
@@ -296,9 +298,9 @@ static VALUE stream_connect(VALUE klass, VALUE addr, int io_wait)
 {
 	int domain;
 	socklen_t addrlen;
-	struct sockaddr *sockaddr = sockaddr_from(&addrlen, addr);
+	const struct sockaddr *sockaddr = sockaddr_from(&addrlen, addr);
 
-	switch (((struct sockaddr_storage *)(sockaddr))->ss_family) {
+	switch (((const struct sockaddr_storage *)(sockaddr))->ss_family) {
 	case AF_UNIX: domain = PF_UNIX; break;
 	case AF_INET: domain = PF_INET; break;
 	case AF_INET6: domain = PF_INET6; break;
