@@ -1,3 +1,4 @@
+/* We do not modify RSTRING in this file, so RSTRING_MODIFIED is not needed */
 #include <ruby.h>
 #ifdef HAVE_RUBY_IO_H
 #  include <ruby/io.h>

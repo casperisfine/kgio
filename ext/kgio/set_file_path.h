@@ -1,3 +1,4 @@
+/* We do not modify RSTRING in this file, so RSTRING_MODIFIED is not needed */
 #if defined(HAVE_RB_IO_T) && \
     defined(HAVE_TYPE_STRUCT_RFILE) && \
     defined(HAVE_ST_PATHV)

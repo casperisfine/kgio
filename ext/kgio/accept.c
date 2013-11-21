@@ -1,3 +1,6 @@
+/* ref: rubinius b2811f260de16d1e972462e27852470364608de5 */
+#define RSTRING_MODIFIED 1
+
 #include "kgio.h"
 #include "missing_accept4.h"
 #include "sock_for_fd.h"
