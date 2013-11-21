@@ -23,16 +23,10 @@
 
 #include "ancient_ruby.h"
 
-struct io_args {
-	VALUE io;
-	VALUE buf;
-	char *ptr;
-	long len;
-	int fd;
-};
-
 void init_kgio_wait(void);
-void init_kgio_read_write(void);
+void init_kgio_read(void);
+void init_kgio_write(void);
+void init_kgio_writev(void);
 void init_kgio_accept(void);
 void init_kgio_connect(void);
 void init_kgio_autopush(void);
@@ -83,5 +77,23 @@ typedef  void *(*kgio_blocking_fn_t)(void*);
 #endif
 
 extern unsigned kgio_tfo;
+NORETURN(void kgio_raise_empty_bt(VALUE, const char *));
+NORETURN(void kgio_wr_sys_fail(const char *));
+NORETURN(void kgio_rd_sys_fail(const char *));
 
+/*
+ * we know MSG_DONTWAIT works properly on all stream sockets under Linux
+ * we can define this macro for other platforms as people care and
+ * notice.
+ */
+#  if defined(__linux__)
+#    define USE_MSG_DONTWAIT
+#  endif
+
+#ifdef USE_MSG_DONTWAIT
+/* we don't need these variants, we call kgio_autopush_send/recv directly */
+static inline void kgio_autopush_write(VALUE io) { }
+#else
+static inline void kgio_autopush_write(VALUE io) { kgio_autopush_send(io); }
+#endif
 #endif /* KGIO_H */
