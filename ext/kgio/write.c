@@ -160,7 +160,7 @@ static VALUE kgio_trysend(VALUE io, VALUE str)
 #  define kgio_trysend kgio_trywrite
 #endif /* ! USE_MSG_DONTWAIT */
 
-#ifdef HAVE_RB_THREAD_IO_BLOCKING_REGION
+#if defined(KGIO_HAVE_THREAD_CALL_WITHOUT_GVL)
 #  include "blocking_io_region.h"
 #ifdef MSG_DONTWAIT /* Linux only */
 #  define MY_MSG_DONTWAIT (MSG_DONTWAIT)
