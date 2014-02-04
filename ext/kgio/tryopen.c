@@ -171,7 +171,13 @@ void init_kgio_tryopen(void)
 		switch (TYPE(err)) {
 		case T_SYMBOL: const_id = SYM2ID(err); break;
 		case T_STRING: const_id = rb_intern(RSTRING_PTR(err)); break;
-		default: rb_bug("constant not a symbol or string");
+		default: {
+			VALUE i = rb_inspect(err);
+			const char *s = RSTRING_PTR(i);
+
+			rb_bug("constant not a symbol or string: %s", s);
+			RB_GC_GUARD(i);
+			}
 		}
 
 		error = rb_const_get(rb_mErrno, const_id);
