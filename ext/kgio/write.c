@@ -15,6 +15,7 @@ struct wr_args {
 	const char *ptr;
 	long len;
 	int fd;
+	int flags;
 };
 
 static void prepare_write(struct wr_args *a, VALUE io, VALUE str)
@@ -159,6 +160,56 @@ static VALUE kgio_trysend(VALUE io, VALUE str)
 #  define kgio_trysend kgio_trywrite
 #endif /* ! USE_MSG_DONTWAIT */
 
+#ifdef HAVE_RB_THREAD_IO_BLOCKING_REGION
+#  include "blocking_io_region.h"
+#ifdef MSG_DONTWAIT /* Linux only */
+#  define MY_MSG_DONTWAIT (MSG_DONTWAIT)
+#else
+#  define MY_MSG_DONTWAIT (0)
+#endif
+
+static VALUE nogvl_send(void *ptr)
+{
+	struct wr_args *a = ptr;
+
+	return (VALUE)send(a->fd, a->ptr, a->len, a->flags);
+}
+/*
+ * call-seq:
+ *
+ *	io.kgio_syssend(str, flags) -> nil, String or :wait_writable
+ *
+ * Returns nil if the write was completed in full.
+ *
+ * Returns a String containing the unwritten portion if EAGAIN
+ * was encountered, but some portion was successfully written.
+ *
+ * Returns :wait_writable if EAGAIN is encountered and nothing
+ * was written.
+ *
+ * This method is only available on Ruby 1.9.3 or later.
+ */
+static VALUE kgio_syssend(VALUE io, VALUE str, VALUE flags)
+{
+	struct wr_args a;
+	long n;
+
+	a.flags = NUM2INT(flags);
+	prepare_write(&a, io, str);
+	if (a.flags & MY_MSG_DONTWAIT) {
+		do {
+			n = (long)send(a.fd, a.ptr, a.len, a.flags);
+		} while (write_check(&a, n, "send", 0) != 0);
+	} else {
+		do {
+			n = (long)rb_thread_io_blocking_region(
+						nogvl_send, &a, a.fd);
+		} while (write_check(&a, n, "send", 0) != 0);
+	}
+	return a.buf;
+}
+#endif /* HAVE_RB_THREAD_IO_BLOCKING_REGION */
+
 /*
  * call-seq:
  *
@@ -209,4 +260,8 @@ void init_kgio_write(void)
 	mSocketMethods = rb_define_module_under(mKgio, "SocketMethods");
 	rb_define_method(mSocketMethods, "kgio_write", kgio_send, 1);
 	rb_define_method(mSocketMethods, "kgio_trywrite", kgio_trysend, 1);
+
+#ifdef USE_MSG_DONTWAIT
+	rb_define_method(mSocketMethods, "kgio_syssend", kgio_syssend, 2);
+#endif
 }
