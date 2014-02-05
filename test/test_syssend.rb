@@ -40,4 +40,4 @@ class TestKgioSyssend < Test::Unit::TestCase
   ensure
     [ srv, acc, client ].each { |io| io.close if io }
   end
-end if RUBY_PLATFORM =~ /linux/
+end if RUBY_PLATFORM =~ /linux/ && Socket.const_defined?(:MSG_MORE)

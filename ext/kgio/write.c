@@ -261,7 +261,7 @@ void init_kgio_write(void)
 	rb_define_method(mSocketMethods, "kgio_write", kgio_send, 1);
 	rb_define_method(mSocketMethods, "kgio_trywrite", kgio_trysend, 1);
 
-#ifdef USE_MSG_DONTWAIT
+#if defined(KGIO_HAVE_THREAD_CALL_WITHOUT_GVL)
 	rb_define_method(mSocketMethods, "kgio_syssend", kgio_syssend, 2);
 #endif
 }
