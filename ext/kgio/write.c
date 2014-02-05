@@ -4,11 +4,6 @@
 #include "nonblock.h"
 static VALUE sym_wait_writable;
 
-/* prefer rb_str_subseq because we don't use negative offsets */
-#ifndef HAVE_RB_STR_SUBSEQ
-#define rb_str_subseq rb_str_substr
-#endif
-
 struct wr_args {
 	VALUE io;
 	VALUE buf;

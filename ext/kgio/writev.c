@@ -19,6 +19,17 @@ static ssize_t assert_writev(int fd, void* iov, int len)
 }
 #  define writev assert_writev
 #endif
+
+#ifndef HAVE_RB_ARY_SUBSEQ
+static inline VALUE my_ary_subseq(VALUE ary, long idx, long len)
+{
+       VALUE args[2] = { LONG2FIX(idx), LONG2FIX(len) };
+
+       return rb_ary_aref(2, args, ary);
+}
+#define rb_ary_subseq my_ary_subseq
+#endif
+
 static VALUE sym_wait_writable;
 
 #ifndef HAVE_WRITEV

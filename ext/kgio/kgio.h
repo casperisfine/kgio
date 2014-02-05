@@ -96,4 +96,10 @@ static inline void kgio_autopush_write(VALUE io) { }
 #else
 static inline void kgio_autopush_write(VALUE io) { kgio_autopush_send(io); }
 #endif
+
+/* prefer rb_str_subseq because we don't use negative offsets */
+#ifndef HAVE_RB_STR_SUBSEQ
+#define rb_str_subseq rb_str_substr
+#endif
+
 #endif /* KGIO_H */
