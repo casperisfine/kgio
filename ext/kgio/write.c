@@ -155,7 +155,7 @@ static VALUE kgio_trysend(VALUE io, VALUE str)
 #  define kgio_trysend kgio_trywrite
 #endif /* ! USE_MSG_DONTWAIT */
 
-#if defined(KGIO_HAVE_THREAD_CALL_WITHOUT_GVL)
+#if defined(KGIO_WITHOUT_GVL)
 #  include "blocking_io_region.h"
 #ifdef MSG_DONTWAIT /* Linux only */
 #  define MY_MSG_DONTWAIT (MSG_DONTWAIT)
@@ -256,7 +256,7 @@ void init_kgio_write(void)
 	rb_define_method(mSocketMethods, "kgio_write", kgio_send, 1);
 	rb_define_method(mSocketMethods, "kgio_trywrite", kgio_trysend, 1);
 
-#if defined(KGIO_HAVE_THREAD_CALL_WITHOUT_GVL)
+#if defined(KGIO_WITHOUT_GVL)
 	rb_define_method(mSocketMethods, "kgio_syssend", kgio_syssend, 2);
 #endif
 }

@@ -13,7 +13,7 @@ static VALUE cKgio_Socket;
 static VALUE mSocketMethods;
 static VALUE iv_kgio_addr;
 
-#if defined(__linux__) && defined(KGIO_HAVE_THREAD_CALL_WITHOUT_GVL)
+#if defined(__linux__) && defined(KGIO_WITHOUT_GVL)
 static int accept4_flags = SOCK_CLOEXEC;
 #else /* ! linux */
 static int accept4_flags = SOCK_CLOEXEC | SOCK_NONBLOCK;
@@ -79,7 +79,7 @@ static VALUE xaccept(void *ptr)
 	return (VALUE)rv;
 }
 
-#ifdef KGIO_HAVE_THREAD_CALL_WITHOUT_GVL
+#ifdef KGIO_WITHOUT_GVL
 #  include <time.h>
 #  include "blocking_io_region.h"
 static int thread_accept(struct accept_args *a, int force_nonblock)
@@ -89,7 +89,7 @@ static int thread_accept(struct accept_args *a, int force_nonblock)
 	return (int)rb_thread_io_blocking_region(xaccept, a, a->fd);
 }
 
-#else /* ! KGIO_HAVE_THREAD_CALL_WITHOUT_GVL */
+#else /* ! KGIO_WITHOUT_GVL */
 #  include <rubysig.h>
 static int thread_accept(struct accept_args *a, int force_nonblock)
 {
@@ -106,7 +106,7 @@ static int thread_accept(struct accept_args *a, int force_nonblock)
 	TRAP_END;
 	return rv;
 }
-#endif /* ! KGIO_HAVE_THREAD_CALL_WITHOUT_GVL */
+#endif /* ! KGIO_WITHOUT_GVL */
 
 static void
 prepare_accept(struct accept_args *a, VALUE self, int argc, const VALUE *argv)

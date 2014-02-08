@@ -107,14 +107,16 @@ static void hash2pollfds(struct poll_args *a)
 	rb_hash_foreach(a->ios, io_to_pollfd_i, (VALUE)a);
 }
 
-static VALUE nogvl_poll(void *ptr)
+static void * nogvl_poll(void *ptr)
 {
 	struct poll_args *a = ptr;
+	long n;
 
 	if (a->timeout > 0)
 		clock_gettime(hopefully_CLOCK_MONOTONIC, &a->start);
 
-	return (VALUE)poll(a->fds, a->nfds, a->timeout);
+	n = poll(a->fds, a->nfds, a->timeout);
+	return (void *)n;
 }
 
 static VALUE poll_result(int nr, struct poll_args *a)
@@ -145,7 +147,7 @@ static VALUE do_poll(VALUE args)
 
 retry:
 	hash2pollfds(a);
-	nr = (long)rb_thread_blocking_region(nogvl_poll, a, RUBY_UBF_IO, NULL);
+	nr = (long)KGIO_WITHOUT_GVL(nogvl_poll, a, RUBY_UBF_IO, NULL);
 	if (nr < 0) {
 		if (interrupted()) {
 			if (retryable(a)) {

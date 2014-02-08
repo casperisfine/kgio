@@ -33,23 +33,24 @@ struct open_args {
 #  define rb_cloexec_open(p,f,m) open((p),(f),(m))
 #endif
 
-static VALUE nogvl_open(void *ptr)
+static void * nogvl_open(void *ptr)
 {
 	struct open_args *o = ptr;
+        long fd = (long)rb_cloexec_open(o->pathname, o->flags, o->mode);
 
-	return (VALUE)rb_cloexec_open(o->pathname, o->flags, o->mode);
+	return (void *)fd;
 }
 
-#ifndef KGIO_HAVE_THREAD_CALL_WITHOUT_GVL
+#ifndef KGIO_WITHOUT_GVL
 #  define RUBY_UBF_IO ((void *)(-1))
 #  include "rubysig.h"
-typedef void rb_unblock_function_t(void *);
-typedef VALUE rb_blocking_function_t(void *);
-static VALUE my_thread_blocking_region(
-	rb_blocking_function_t *fn, void *data1,
-	rb_unblock_function_t *ubf, void *data2)
+typedef void my_unblock_function_t(void *);
+typedef void *my_blocking_function_t(void *);
+static void * my_thread_blocking_region(
+	my_blocking_function_t *fn, void *data1,
+	my_unblock_function_t *ubf, void *data2)
 {
-	VALUE rv;
+	void *rv;
 
 	TRAP_BEG; /* for FIFO */
 	rv = fn(data1);
@@ -57,9 +58,9 @@ static VALUE my_thread_blocking_region(
 
 	return rv;
 }
-#define rb_thread_blocking_region(fn,data1,ubf,data2) \
+#define KGIO_WITHOUT_GVL(fn,data1,ubf,data2) \
         my_thread_blocking_region((fn),(data1),(ubf),(data2))
-#endif /* ! KGIO_HAVE_THREAD_CALL_WITHOUT_GVL */
+#endif /* ! KGIO_WITHOUT_GVL */
 
 /*
  * call-seq:
@@ -107,7 +108,7 @@ static VALUE s_tryopen(int argc, VALUE *argv, VALUE klass)
 	}
 
 retry:
-	fd = (long)rb_thread_blocking_region(nogvl_open, &o, RUBY_UBF_IO, 0);
+	fd = (long)KGIO_WITHOUT_GVL(nogvl_open, &o, RUBY_UBF_IO, 0);
 	if (fd < 0) {
 		if (errno == EMFILE || errno == ENFILE || errno == ENOMEM) {
 			rb_gc();
