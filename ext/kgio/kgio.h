@@ -39,8 +39,7 @@ void kgio_autopush_send(VALUE);
 
 VALUE kgio_call_wait_writable(VALUE io);
 VALUE kgio_call_wait_readable(VALUE io);
-#if defined(HAVE_RB_THREAD_CALL_WITHOUT_GVL) && \
-    !defined(HAVE_RB_THREAD_BLOCKING_REGION)
+#if defined(HAVE_RB_THREAD_CALL_WITHOUT_GVL) && defined(HAVE_RUBY_THREAD_H)
 #  define KGIO_WITHOUT_GVL(fn,data1,ubf,data2) \
       rb_thread_call_without_gvl((fn),(data1),(ubf),(data2))
 #elif defined(HAVE_RB_THREAD_BLOCKING_REGION)
