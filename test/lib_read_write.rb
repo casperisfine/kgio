@@ -292,7 +292,8 @@ module LibReadWriteTest
     assert_equal :wait_writable, tmp.pop
     assert tmp.size > 0
     penultimate = tmp.pop
-    assert(penultimate == "I" || penultimate == nil)
+    assert(penultimate == ["I"] || penultimate == nil,
+           "penultimate is #{penultimate.inspect}")
     assert tmp.size > 0
     tmp.each { |count| assert_equal nil, count }
   end
