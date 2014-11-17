@@ -9,21 +9,19 @@ Gem::Specification.new do |s|
   s.version = ENV["VERSION"].dup
   s.homepage = Wrongdoc.config[:rdoc_url]
   s.authors = ["#{name} hackers"]
-  s.date = Time.now.utc.strftime('%Y-%m-%d')
   s.description = readme_description
   s.email = %q{kgio-public@bogomips.org}
   s.extra_rdoc_files = extra_rdoc_files(manifest)
   s.files = manifest
   s.rdoc_options = rdoc_options
-  s.rubyforge_project = %q{rainbows}
   s.summary = summary
   s.test_files = Dir['test/test_*.rb']
   s.extensions = %w(ext/kgio/extconf.rb)
 
   # development dependencies commented out for folks stuck on
   # old Ruby/RubyGems versions
-  # s.add_development_dependency('wrongdoc', '~> 1.5')
+  # s.add_development_dependency('wrongdoc', '~> 1.8')
   # s.add_development_dependency('strace_me', '~> 1.0') # Linux only
 
-  # s.license = %w(LGPL) # disabled for compatibility with older RubyGems
+  s.licenses = %w(LGPLv2.1+)
 end
