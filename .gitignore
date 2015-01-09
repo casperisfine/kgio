@@ -12,7 +12,6 @@ Makefile
 log/
 pkg/
 /NEWS
-/ChangeLog
 /.manifest
 /GIT-VERSION-FILE
 /man
@@ -20,3 +19,4 @@ tags
 TAGS
 /LATEST
 /tmp
+/NEWS.atom.xml

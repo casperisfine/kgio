@@ -1,13 +1,13 @@
 ENV["VERSION"] or abort "VERSION= must be specified"
 manifest = File.readlines('.manifest').map! { |x| x.chomp! }
-require 'wrongdoc'
-extend Wrongdoc::Gemspec
+require 'olddoc'
+extend Olddoc::Gemspec
 name, summary, title = readme_metadata
 
 Gem::Specification.new do |s|
   s.name = %q{kgio}
   s.version = ENV["VERSION"].dup
-  s.homepage = Wrongdoc.config[:rdoc_url]
+  s.homepage = Olddoc.config['rdoc_url']
   s.authors = ["#{name} hackers"]
   s.description = readme_description
   s.email = %q{kgio-public@bogomips.org}
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   # development dependencies commented out for folks stuck on
   # old Ruby/RubyGems versions
-  # s.add_development_dependency('wrongdoc', '~> 1.8')
+  s.add_development_dependency('olddoc', '~> 1.0')
   # s.add_development_dependency('strace_me', '~> 1.0') # Linux only
 
   s.licenses = %w(LGPLv2.1+)

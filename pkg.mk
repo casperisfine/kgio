@@ -1,7 +1,8 @@
 RUBY = ruby
 RAKE = rake
 RSYNC = rsync
-WRONGDOC = wrongdoc
+OLDDOC = olddoc
+RDOC = rdoc
 
 GIT-VERSION-FILE: .FORCE-GIT-VERSION-FILE
 	@./GIT-VERSION-GEN
@@ -48,10 +49,10 @@ else
 build:
 endif
 
-pkg_extra += GIT-VERSION-FILE NEWS ChangeLog LATEST
-ChangeLog: GIT-VERSION-FILE .wrongdoc.yml
-	$(WRONGDOC) prepare
-NEWS LATEST: ChangeLog
+pkg_extra += GIT-VERSION-FILE NEWS LATEST
+NEWS: GIT-VERSION-FILE .olddoc.yml
+	$(OLDDOC) prepare
+LATEST: NEWS
 
 manifest:
 	$(RM) .manifest
@@ -63,12 +64,14 @@ manifest:
 	cmp $@+ $@ || mv $@+ $@
 	$(RM) $@+
 
-doc:: .document .wrongdoc.yml $(pkg_extra)
+doc:: .document .olddoc.yml $(pkg_extra)
 	-find lib -type f -name '*.rbc' -exec rm -f '{}' ';'
 	-find ext -type f -name '*.rbc' -exec rm -f '{}' ';'
 	$(RM) -r doc
-	$(WRONGDOC) all
+	$(RDOC) -f oldweb
 	install -m644 COPYING doc/COPYING
+	install -m644 NEWS doc/NEWS
+	install -m644 NEWS.atom.xml doc/NEWS.atom.xml
 	install -m644 $(shell LC_ALL=C grep '^[A-Z]' .document) doc/
 
 ifneq ($(VERSION),)
@@ -163,7 +166,7 @@ endif
 
 # Create gzip variants of the same timestamp as the original so nginx
 # "gzip_static on" can serve the gzipped versions directly.
-doc_gz: docs = $(shell find doc -type f ! -regex '^.*\.\(gif\|jpg\|png\|gz\)$$')
+doc_gz: docs = $(shell find doc -type f ! -regex '^.*\.gz$$')
 doc_gz:
 	for i in $(docs); do \
 	  gzip --rsyncable -9 < $$i > $$i.gz; touch -r $$i $$i.gz; done
