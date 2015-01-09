@@ -194,4 +194,5 @@ void init_kgio_tryopen(void)
 			          ID2SYM(const_id));
 		}
 	}
+	RB_GC_GUARD(tmp);
 }
