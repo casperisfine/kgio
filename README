@@ -10,7 +10,7 @@ applications (that run on Unix-like platforms).
 * Can avoid expensive exceptions on common EAGAIN/EINPROGRESS errors,
   returning :wait_readable or :wait_writable instead.
   These exceptions got more expensive to hit under Ruby 1.9.2
-  (but should be fixed in Ruby 1.9.3 to 1.9.1 performance levels)
+  (but were fixed in Ruby 1.9.3 and later to 1.9.1 performance levels)
 
 * Returns the unwritten portion of the string on partial writes,
   making it ideal for buffering unwritten data.
@@ -32,10 +32,7 @@ applications (that run on Unix-like platforms).
 
 The library consists of a C extension so you'll need a Unix-like system
 with a C compiler and Ruby development libraries/headers.
-
-http://rubyforge.org/frs/?group_id=8977
-
-You may also install it via RubyGems.org:
+You may install it via RubyGems.org:
 
   gem install kgio
 

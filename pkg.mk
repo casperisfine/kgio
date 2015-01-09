@@ -77,17 +77,6 @@ doc:: .document .olddoc.yml $(pkg_extra)
 ifneq ($(VERSION),)
 pkggem := pkg/$(rfpackage)-$(VERSION).gem
 pkgtgz := pkg/$(rfpackage)-$(VERSION).tgz
-release_notes := release_notes-$(VERSION)
-release_changes := release_changes-$(VERSION)
-
-release-notes: $(release_notes)
-release-changes: $(release_changes)
-$(release_changes):
-	$(WRONGDOC) release_changes > $@+
-	$(VISUAL) $@+ && test -s $@+ && mv $@+ $@
-$(release_notes):
-	$(WRONGDOC) release_notes > $@+
-	$(VISUAL) $@+ && test -s $@+ && mv $@+ $@
 
 # ensures we're actually on the tagged $(VERSION), only used for release
 verify:
@@ -123,23 +112,9 @@ $(pkgtgz): manifest fix-perms
 
 package: $(pkgtgz) $(pkggem)
 
-test-release:: verify package $(release_notes) $(release_changes)
-	# make tgz release on RubyForge
-	@echo rubyforge add_release -f \
-	  -n $(release_notes) -a $(release_changes) \
-	  $(rfproject) $(rfpackage) $(VERSION) $(pkgtgz)
-	@echo gem push $(pkggem)
-	@echo rubyforge add_file \
-	  $(rfproject) $(rfpackage) $(VERSION) $(pkggem)
-release:: verify package $(release_notes) $(release_changes)
-	# make tgz release on RubyForge
-	rubyforge add_release -f -n $(release_notes) -a $(release_changes) \
-	  $(rfproject) $(rfpackage) $(VERSION) $(pkgtgz)
+release:: verify package
 	# push gem to RubyGems.org
 	gem push $(pkggem)
-	# in case of gem downloads from RubyForge releases page
-	rubyforge add_file \
-	  $(rfproject) $(rfpackage) $(VERSION) $(pkggem)
 else
 gem install-gem: GIT-VERSION-FILE
 	$(MAKE) $@ VERSION=$(GIT_VERSION)

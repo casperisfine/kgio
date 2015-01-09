@@ -18,9 +18,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir['test/test_*.rb']
   s.extensions = %w(ext/kgio/extconf.rb)
 
-  # development dependencies commented out for folks stuck on
-  # old Ruby/RubyGems versions
   s.add_development_dependency('olddoc', '~> 1.0')
+  s.add_development_dependency('test-unit', '~> 3.0')
   # s.add_development_dependency('strace_me', '~> 1.0') # Linux only
 
   s.licenses = %w(LGPLv2.1+)
