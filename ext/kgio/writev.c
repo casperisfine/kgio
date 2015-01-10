@@ -194,7 +194,7 @@ static long trim_writev_buffer(struct wrv_args *a, ssize_t n)
 	if (n < 0) {
 		VALUE str = rb_ary_entry(a->buf, 0);
 		long str_len = RSTRING_LEN(str);
-		str = rb_str_subseq(str, str_len + n, -n);
+		str = MY_STR_SUBSEQ(str, str_len + n, -n);
 		rb_ary_store(a->buf, 0, str);
 	}
 	return RARRAY_LEN(a->buf);

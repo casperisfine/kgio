@@ -45,7 +45,7 @@ done:
 				a->ptr = RSTRING_PTR(a->buf) + written;
 				return -1;
 			} else if (written > 0) {
-				a->buf = rb_str_subseq(a->buf, written, a->len);
+				a->buf = MY_STR_SUBSEQ(a->buf, written, a->len);
 			} else {
 				a->buf = sym_wait_writable;
 			}

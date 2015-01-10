@@ -99,7 +99,9 @@ static inline void kgio_autopush_write(VALUE io) { kgio_autopush_send(io); }
 
 /* prefer rb_str_subseq because we don't use negative offsets */
 #ifndef HAVE_RB_STR_SUBSEQ
-#define rb_str_subseq rb_str_substr
+#define MY_STR_SUBSEQ(str,beg,len) rb_str_substr((str),(beg),(len))
+#else
+#define MY_STR_SUBSEQ(str,beg,len) rb_str_subseq((str),(beg),(len))
 #endif
 
 #endif /* KGIO_H */

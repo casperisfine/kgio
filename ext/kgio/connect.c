@@ -146,9 +146,6 @@ static const struct sockaddr *sockaddr_from(socklen_t *addrlen, VALUE addr)
 }
 
 #if defined(MSG_FASTOPEN) && defined(KGIO_WITHOUT_GVL)
-#ifndef HAVE_RB_STR_SUBSEQ
-#define rb_str_subseq rb_str_substr
-#endif
 struct tfo_args {
 	int fd;
 	const void *buf;
@@ -200,7 +197,7 @@ static VALUE fastopen(VALUE sock, VALUE buf, VALUE addr)
 	if ((size_t)w == a.buflen)
 		return Qnil;
 
-	return rb_str_subseq(str, w, a.buflen - w);
+	return MY_STR_SUBSEQ(str, w, a.buflen - w);
 }
 #endif /* MSG_FASTOPEN */
 
