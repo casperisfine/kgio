@@ -56,22 +56,22 @@ struct my_iovec {
  * turns x/512 into x>>9 */
 #define WRITEV_IMPL_THRESHOLD 512
 
-static unsigned int iov_max = 1024; /* this could be overriden in init */
+static int iov_max = 1024; /* this could be overriden in init */
 
 struct wrv_args {
 	VALUE io;
 	VALUE buf;
 	VALUE vec_buf; /* FIXME: this requires RSTRING_MODIFY for rbx */
 	struct iovec *vec;
-	unsigned long iov_cnt;
+	int iov_cnt;
 	size_t batch_len;
 	int something_written;
 	int fd;
 };
 
-static ssize_t custom_writev(int fd, const struct iovec *vec, unsigned int iov_cnt, size_t total_len)
+static ssize_t custom_writev(int fd, const struct iovec *vec, int iov_cnt, size_t total_len)
 {
-	unsigned int i;
+	int i;
 	ssize_t result;
 	char *buf, *curbuf;
 	const struct iovec *curvec = vec;
@@ -113,12 +113,25 @@ static void prepare_writev(struct wrv_args *a, VALUE io, VALUE ary)
 	a->vec = NULL;
 }
 
+#ifndef RARRAY_LENINT
+static inline int rarray_int(VALUE val)
+{
+	long num = RARRAY_LEN(val);
+
+	if ((long)(int)num != num)
+		rb_raise(rb_eRangeError, "%ld cannot to be an int", num);
+
+	return (int)num;
+}
+#define RARRAY_LENINT(n) rarray_int(n)
+#endif
+
 static void fill_iovec(struct wrv_args *a)
 {
-	unsigned long i;
+	int i;
 	struct iovec *curvec;
 
-	a->iov_cnt = RARRAY_LEN(a->buf);
+	a->iov_cnt = RARRAY_LENINT(a->buf);
 	a->batch_len = 0;
 	if (a->iov_cnt == 0) return;
 	if (a->iov_cnt > iov_max) a->iov_cnt = iov_max;
@@ -150,18 +163,18 @@ static void fill_iovec(struct wrv_args *a)
 	}
 }
 
-static long trim_writev_buffer(struct wrv_args *a, long n)
+static long trim_writev_buffer(struct wrv_args *a, ssize_t n)
 {
 	long i;
 	long ary_len = RARRAY_LEN(a->buf);
 
-	if (n == (long)a->batch_len) {
+	if (n == (ssize_t)a->batch_len) {
 		i = a->iov_cnt;
 		n = 0;
 	} else {
 		for (i = 0; n && i < ary_len; i++) {
 			VALUE entry = rb_ary_entry(a->buf, i);
-			n -= RSTRING_LEN(entry);
+			n -= (ssize_t)RSTRING_LEN(entry);
 			if (n < 0) break;
 		}
 	}
@@ -187,7 +200,8 @@ static long trim_writev_buffer(struct wrv_args *a, long n)
 	return RARRAY_LEN(a->buf);
 }
 
-static int writev_check(struct wrv_args *a, long n, const char *msg, int io_wait)
+static long
+writev_check(struct wrv_args *a, ssize_t n, const char *msg, int io_wait)
 {
 	if (n >= 0) {
 		if (n > 0) a->something_written = 1;
@@ -214,7 +228,7 @@ static int writev_check(struct wrv_args *a, long n, const char *msg, int io_wait
 static VALUE my_writev(VALUE io, VALUE ary, int io_wait)
 {
 	struct wrv_args a;
-	long n;
+	ssize_t n;
 
 	prepare_writev(&a, io, ary);
 	set_nonblocking(a.fd);
@@ -224,15 +238,13 @@ static VALUE my_writev(VALUE io, VALUE ary, int io_wait)
 		if (a.iov_cnt == 0)
 			n = 0;
 		else if (a.iov_cnt == 1)
-			n = (long)write(a.fd, a.vec[0].iov_base,
-			                a.vec[0].iov_len);
+			n = write(a.fd, a.vec[0].iov_base, a.vec[0].iov_len);
 		/* for big strings use library function */
 		else if (USE_WRITEV &&
-		        ((a.batch_len / WRITEV_IMPL_THRESHOLD) > a.iov_cnt))
-			n = (long)writev(a.fd, a.vec, a.iov_cnt);
+		        ((long)(a.batch_len/WRITEV_IMPL_THRESHOLD) > a.iov_cnt))
+			n = writev(a.fd, a.vec, a.iov_cnt);
 		else
-			n = (long)custom_writev(a.fd, a.vec, a.iov_cnt,
-			                        a.batch_len);
+			n = custom_writev(a.fd, a.vec, a.iov_cnt, a.batch_len);
 	} while (writev_check(&a, n, "writev", io_wait) != 0);
 	rb_str_resize(a.vec_buf, 0);
 
@@ -303,9 +315,9 @@ static VALUE s_trywritev(VALUE mod, VALUE io, VALUE ary)
 void init_kgio_writev(void)
 {
 #ifdef IOV_MAX
-	unsigned int sys_iov_max = IOV_MAX;
+	int sys_iov_max = IOV_MAX;
 #else
-	unsigned int sys_iov_max = sysconf(_SC_IOV_MAX);
+	int sys_iov_max = (int)sysconf(_SC_IOV_MAX);
 #endif
 
 	VALUE mPipeMethods, mSocketMethods;

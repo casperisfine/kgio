@@ -160,7 +160,7 @@ retry:
 	}
 	if (nr == 0) return Qnil;
 
-	return poll_result(nr, a);
+	return poll_result((int)nr, a);
 }
 
 /*
