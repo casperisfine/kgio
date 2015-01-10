@@ -1,5 +1,4 @@
 RUBY = ruby
-RAKE = rake
 RSYNC = rsync
 OLDDOC = olddoc
 RDOC = rdoc
@@ -132,8 +131,6 @@ ifneq ($(RSYNC_DEST),)
 publish_doc:
 	-git set-file-times
 	$(MAKE) doc
-	find doc/images -type f | \
-		TZ=UTC xargs touch -d '1970-01-01 00:00:06' doc/rdoc.css
 	$(MAKE) doc_gz
 	$(RSYNC) -av doc/ $(RSYNC_DEST)/
 	git ls-files | xargs touch
