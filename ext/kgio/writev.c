@@ -27,7 +27,9 @@ static inline VALUE my_ary_subseq(VALUE ary, long idx, long len)
 
        return rb_ary_aref(2, args, ary);
 }
-#define rb_ary_subseq my_ary_subseq
+#define MY_ARY_SUBSEQ(ary,idx,len) my_ary_subseq((ary),(idx),(len))
+#else
+#define MY_ARY_SUBSEQ(ary,idx,len) rb_ary_subseq((ary),(idx),(len))
 #endif
 
 static VALUE sym_wait_writable;
@@ -105,7 +107,7 @@ static void prepare_writev(struct wrv_args *a, VALUE io, VALUE ary)
 
 	if (TYPE(ary) == T_ARRAY)
 		/* rb_ary_subseq will not copy array unless it modified */
-		a->buf = rb_ary_subseq(ary, 0, RARRAY_LEN(ary));
+		a->buf = MY_ARY_SUBSEQ(ary, 0, RARRAY_LEN(ary));
 	else
 		a->buf = rb_Array(ary);
 
@@ -188,7 +190,7 @@ static long trim_writev_buffer(struct wrv_args *a, ssize_t n)
 
 	/* partially done, remove fully-written buffers */
 	if (i > 0)
-		a->buf = rb_ary_subseq(a->buf, i, ary_len - i);
+		a->buf = MY_ARY_SUBSEQ(a->buf, i, ary_len - i);
 
 	/* setup+replace partially written buffer */
 	if (n < 0) {
