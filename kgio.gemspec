@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.email = %q{kgio-public@bogomips.org}
   s.extra_rdoc_files = extra_rdoc_files(manifest)
   s.files = manifest
-  s.rdoc_options = rdoc_options
   s.summary = summary
   s.test_files = Dir['test/test_*.rb']
   s.extensions = %w(ext/kgio/extconf.rb)
