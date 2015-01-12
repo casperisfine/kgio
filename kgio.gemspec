@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency('test-unit', '~> 3.0')
   # s.add_development_dependency('strace_me', '~> 1.0') # Linux only
 
-  s.licenses = %w(LGPLv2.1+)
+  s.licenses = %w(LGPL-2.1+)
 end
