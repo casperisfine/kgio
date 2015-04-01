@@ -90,8 +90,7 @@ static ssize_t custom_writev(int fd, const struct iovec *vec, int iov_cnt, size_
 
 	result = write(fd, buf, total_len);
 
-	/* well, it seems that `free` could not change errno
-	 * but lets save it anyway */
+	/* free() may alter errno */
 	i = errno;
 	free(buf);
 	errno = i;
