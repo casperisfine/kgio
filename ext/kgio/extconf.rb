@@ -51,6 +51,7 @@ have_func('rb_thread_call_without_gvl', %w{ruby/thread.h})
 have_func('rb_thread_blocking_region')
 have_func('rb_thread_io_blocking_region')
 have_func('rb_str_set_len')
+have_func("rb_hash_clear", "ruby.h") # Ruby 2.0+
 have_func('rb_time_interval')
 have_func('rb_wait_for_single_fd')
 have_func('rb_str_subseq')

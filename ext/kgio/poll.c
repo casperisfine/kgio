@@ -12,7 +12,17 @@
 #endif
 
 static VALUE sym_wait_readable, sym_wait_writable;
+
+#ifdef HAVE_RB_HASH_CLEAR /* Ruby >= 2.0 */
+#  define my_hash_clear(h) (void)rb_hash_clear(h)
+#else /* !HAVE_RB_HASH_CLEAR - Ruby <= 1.9.3 */
 static ID id_clear;
+
+static void my_hash_clear(VALUE h)
+{
+	rb_funcall(h, id_clear, 0);
+}
+#endif /* HAVE_RB_HASH_CLEAR */
 
 struct poll_args {
 	struct pollfd *fds;
@@ -126,7 +136,7 @@ static VALUE poll_result(int nr, struct poll_args *a)
 	int rc;
 
 	if ((nfds_t)nr != a->nfds)
-		rb_funcall(a->ios, id_clear, 0);
+		my_hash_clear(a->ios);
 	for (; nr > 0; fds++) {
 		if (fds->revents == 0)
 			continue;
@@ -218,7 +228,9 @@ void init_kgio_poll(void)
 
 	sym_wait_readable = ID2SYM(rb_intern("wait_readable"));
 	sym_wait_writable = ID2SYM(rb_intern("wait_writable"));
+#ifndef HAVE_RB_HASH_CLEAR
 	id_clear = rb_intern("clear");
+#endif
 
 #define c(x) rb_define_const(mKgio,#x,INT2NUM((int)x))
 
