@@ -10,7 +10,8 @@ Unix-like platforms).
 * Can avoid expensive exceptions on common EAGAIN/EINPROGRESS errors,
   returning :wait_readable or :wait_writable instead.
   These exceptions got more expensive to hit under Ruby 1.9.2
-  (but were fixed in Ruby 1.9.3 and later to 1.9.1 performance levels)
+  (but were fixed in Ruby 1.9.3 and later to 1.9.1 performance levels,
+   which were still bad)
 
 * Returns the unwritten portion of the string on partial writes,
   making it ideal for buffering unwritten data.
