@@ -160,12 +160,6 @@ static VALUE in_addr_set(VALUE io, struct sockaddr_storage *addr, socklen_t len)
 	return rb_ivar_set(io, iv_kgio_addr, host);
 }
 
-#if defined(__linux__)
-#  define post_accept kgio_autopush_accept
-#else
-#  define post_accept(a,b) for(;0;)
-#endif
-
 static VALUE
 my_accept(struct accept_args *a, int force_nonblock)
 {
@@ -211,7 +205,6 @@ retry:
 		}
 	}
 	client_io = sock_for_fd(a->accepted_class, client_fd);
-	post_accept(a->accept_io, client_io);
 
 	if (a->addr)
 		in_addr_set(client_io,

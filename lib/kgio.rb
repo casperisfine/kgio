@@ -16,6 +16,16 @@ module Kgio
   # PipeMethods#kgio_trywrite and SocketMethods#kgio_trywrite will return
   # :wait_writable when waiting for a read is required.
   WaitWritable = :wait_writable
+
+  # autopush is no-op nowadays
+  @autopush = false
+
+  class << self
+    attr_accessor :autopush # :nodoc:
+    def autopush? # :nodoc:
+      !!@autopush
+    end
+  end
 end
 
 require 'kgio_ext'

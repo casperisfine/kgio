@@ -29,13 +29,8 @@ void init_kgio_write(void);
 void init_kgio_writev(void);
 void init_kgio_accept(void);
 void init_kgio_connect(void);
-void init_kgio_autopush(void);
 void init_kgio_poll(void);
 void init_kgio_tryopen(void);
-
-void kgio_autopush_accept(VALUE, VALUE);
-void kgio_autopush_recv(VALUE);
-void kgio_autopush_send(VALUE);
 
 VALUE kgio_call_wait_writable(VALUE io);
 VALUE kgio_call_wait_readable(VALUE io);
@@ -89,13 +84,6 @@ NORETURN(void kgio_rd_sys_fail(const char *));
 #  if defined(__linux__)
 #    define USE_MSG_DONTWAIT
 #  endif
-
-#ifdef USE_MSG_DONTWAIT
-/* we don't need these variants, we call kgio_autopush_send/recv directly */
-static inline void kgio_autopush_write(VALUE io) { }
-#else
-static inline void kgio_autopush_write(VALUE io) { kgio_autopush_send(io); }
-#endif
 
 /* prefer rb_str_subseq because we don't use negative offsets */
 #ifndef HAVE_RB_STR_SUBSEQ
