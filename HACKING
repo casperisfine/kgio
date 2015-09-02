@@ -9,8 +9,8 @@ Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
 When referencing mailing list posts, use
-"http://mid.gmane.org/$MESSAGE_ID" if possible since the Message-ID
-remains searchable even if Gmane becomes unavailable.
+"http://bogomips.org/kgio-public/$MESSAGE_ID/" if possible since the
+Message-ID remains searchable even if the archive becomes unavailable.
 
 === Code Compatibility
 
