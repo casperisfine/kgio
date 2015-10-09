@@ -5,7 +5,7 @@ NEWS
 LATEST
 ISSUES
 HACKING
-lib
+lib/kgio.rb
 ext/kgio/accept.c
 ext/kgio/connect.c
 ext/kgio/kgio_ext.c

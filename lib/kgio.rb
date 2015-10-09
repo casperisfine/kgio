@@ -17,13 +17,19 @@ module Kgio
   # :wait_writable when waiting for a read is required.
   WaitWritable = :wait_writable
 
-  # autopush is no-op nowadays
+  # autopush is strongly not recommended nowadays, use MSG_MORE instead
   @autopush = false
 
   class << self
-    attr_accessor :autopush # :nodoc:
+    attr_reader :autopush # :nodoc:
     def autopush? # :nodoc:
       !!@autopush
+    end
+
+    def autopush=(bool) # :nodoc:
+      # No require_relative, we remain 1.8-compatible
+      require 'kgio/autopush'
+      @autopush = bool
     end
   end
 end
