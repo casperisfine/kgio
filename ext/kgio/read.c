@@ -7,8 +7,13 @@ static VALUE sym_wait_readable;
 
 #ifdef USE_MSG_DONTWAIT
 static const int peek_flags = MSG_DONTWAIT|MSG_PEEK;
+
+/* we don't need these variants, we call kgio_autopush_recv directly */
+static inline void kgio_autopush_read(VALUE io) { }
+
 #else
 static const int peek_flags = MSG_PEEK;
+static inline void kgio_autopush_read(VALUE io) { kgio_autopush_recv(io); }
 #endif
 
 struct rd_args {
@@ -80,6 +85,7 @@ static VALUE my_read(int io_wait, int argc, VALUE *argv, VALUE io)
 	long n;
 
 	prepare_read(&a, argc, argv, io);
+	kgio_autopush_read(io);
 
 	if (a.len > 0) {
 		set_nonblocking(a.fd);
@@ -152,6 +158,7 @@ static VALUE my_recv(int io_wait, int argc, VALUE *argv, VALUE io)
 	long n;
 
 	prepare_read(&a, argc, argv, io);
+	kgio_autopush_recv(io);
 
 	if (a.len > 0) {
 retry:
@@ -205,6 +212,7 @@ static VALUE my_peek(int io_wait, int argc, VALUE *argv, VALUE io)
 	long n;
 
 	prepare_read(&a, argc, argv, io);
+	kgio_autopush_recv(io);
 
 	if (a.len > 0) {
 		if (peek_flags == MSG_PEEK)

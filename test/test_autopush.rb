@@ -1,6 +1,3 @@
-# Copyright (C) 2015 all contributors <kgio-public@bogomips.org>
-# License: LGPLv2.1 or later (https://www.gnu.org/licenses/lgpl-2.1.txt)
-# using this code is not recommended, for backwards compatibility only
 require 'tempfile'
 require 'test/unit'
 begin
@@ -164,6 +161,5 @@ class TestAutopush < Test::Unit::TestCase
 
   def teardown
     Kgio.autopush = false
-    assert_equal false, Kgio.autopush?
   end
 end if RUBY_PLATFORM =~ /linux|freebsd/

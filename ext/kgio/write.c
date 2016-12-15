@@ -72,6 +72,8 @@ retry:
 	n = (long)write(a.fd, a.ptr, a.len);
 	if (write_check(&a, n, "write", io_wait) != 0)
 		goto retry;
+	if (TYPE(a.buf) != T_SYMBOL)
+		kgio_autopush_write(io);
 	return a.buf;
 }
 
@@ -124,6 +126,8 @@ retry:
 	n = (long)send(a.fd, a.ptr, a.len, MSG_DONTWAIT);
 	if (write_check(&a, n, "send", io_wait) != 0)
 		goto retry;
+	if (TYPE(a.buf) != T_SYMBOL)
+		kgio_autopush_send(io);
 	return a.buf;
 }
 

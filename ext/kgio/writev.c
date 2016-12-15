@@ -249,6 +249,8 @@ static VALUE my_writev(VALUE io, VALUE ary, int io_wait)
 	} while (writev_check(&a, n, "writev", io_wait) != 0);
 	rb_str_resize(a.vec_buf, 0);
 
+	if (TYPE(a.buf) != T_SYMBOL)
+		kgio_autopush_write(io);
 	return a.buf;
 }
 
