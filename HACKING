@@ -9,7 +9,7 @@ Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
 When referencing mailing list posts, use
-"https://bogomips.org/kgio-public/<MESSAGE-ID>/" if possible since the
+<tt>https://bogomips.org/kgio-public/$MESSAGE_ID/</tt> if possible
 Message-ID remains searchable even if the archive becomes unavailable.
 
 === Code Compatibility
