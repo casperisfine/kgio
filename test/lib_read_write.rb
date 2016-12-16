@@ -7,7 +7,12 @@ $-w = true
 require 'kgio'
 
 module LibReadWriteTest
-  RANDOM_BLOB = File.open("/dev/urandom") { |fp| fp.read(10 * 1024 * 1024) }
+  RANDOM_BLOB = File.open("/dev/urandom") do |fp|
+    nr = 31
+    buf = fp.read(nr)
+    # get roughly a 20MB block of random data
+    (buf * (20 * 1024 * 1024 / nr)) + (buf * rand(123))
+  end
 
   def teardown
     @rd.close if defined?(@rd) && ! @rd.closed?
@@ -369,7 +374,7 @@ module LibReadWriteTest
       @nr += 1
       IO.select(nil, [self])
     end
-    buf = "." * 1024 * 1024 * 10
+    buf = RANDOM_BLOB
     thr = Thread.new { @wr.kgio_write(buf) }
     Thread.pass until thr.stop?
     readed = @rd.read(buf.size)
@@ -385,7 +390,7 @@ module LibReadWriteTest
       @nr += 1
       IO.select(nil, [self])
     end
-    buf = ["." * 1024] * 1024 * 10
+    buf = [ RANDOM_BLOB, RANDOM_BLOB ]
     buf_size = buf.inject(0){|c, s| c + s.size}
     thr = Thread.new { @wr.kgio_writev(buf) }
     Thread.pass until thr.stop?
