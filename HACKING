@@ -2,14 +2,14 @@
 
 === Documentation
 
-We use the latest version of {olddoc}[http://80x24.org/olddoc/] as
+We use the latest version of {olddoc}[https://80x24.org/olddoc/] as
 much as possible.
 
 Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
 When referencing mailing list posts, use
-"http://bogomips.org/kgio-public/$MESSAGE_ID/" if possible since the
+"https://bogomips.org/kgio-public/<MESSAGE-ID>/" if possible since the
 Message-ID remains searchable even if the archive becomes unavailable.
 
 === Code Compatibility
