@@ -92,12 +92,12 @@ static VALUE kgio_wait_writable(int argc, VALUE *argv, VALUE self)
 
 VALUE kgio_call_wait_writable(VALUE io)
 {
-	return rb_funcall(io, id_wait_wr, 0, 0);
+	return rb_funcall(io, id_wait_wr, 0);
 }
 
 VALUE kgio_call_wait_readable(VALUE io)
 {
-	return rb_funcall(io, id_wait_rd, 0, 0);
+	return rb_funcall(io, id_wait_rd, 0);
 }
 
 void init_kgio_wait(void)
