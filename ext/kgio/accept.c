@@ -40,7 +40,7 @@ static VALUE set_accepted(VALUE klass, VALUE aclass)
 	if (NIL_P(aclass))
 		aclass = cKgio_Socket;
 
-	tmp = rb_funcall(aclass, rb_intern("included_modules"), 0, 0);
+	tmp = rb_funcall(aclass, rb_intern("included_modules"), 0);
 	tmp = rb_funcall(tmp, rb_intern("include?"), 1, mSocketMethods);
 
 	if (tmp != Qtrue)
