@@ -59,8 +59,9 @@ class TestTryopen < Test::Unit::TestCase
     tmp.close!
     file = Kgio::File.tryopen(path, IO::RDWR|IO::CREAT, 0000)
     assert_equal 0100000, File.stat(path).mode
-    ensure
-      File.unlink path
+    file.close
+  ensure
+    File.unlink path
   end
 
   require "benchmark"

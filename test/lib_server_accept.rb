@@ -20,6 +20,7 @@ module LibServerAccept
     b = @srv.kgio_tryaccept
     assert_kind_of Kgio::Socket, b
     assert_equal @host, b.kgio_addr
+    a.close
   end
 
   def test_tryaccept_flags
@@ -28,6 +29,7 @@ module LibServerAccept
     b = @srv.kgio_tryaccept nil, 0
     assert_kind_of Kgio::Socket, b
     assert_equal 0, b.fcntl(Fcntl::F_GETFD)
+    a.close
   end
 
   def test_blocking_accept_flags
@@ -36,6 +38,7 @@ module LibServerAccept
     b = @srv.kgio_accept nil, 0
     assert_kind_of Kgio::Socket, b
     assert_equal 0, b.fcntl(Fcntl::F_GETFD)
+    a.close
   end
 
   def test_tryaccept_fail
@@ -44,7 +47,7 @@ module LibServerAccept
 
   def test_blocking_accept
     t0 = Time.now
-    pid = fork { sleep 1; a = client_connect; sleep }
+    pid = fork { sleep 1; a = client_connect; sleep; a.close }
     b = @srv.kgio_accept
     elapsed = Time.now - t0
     assert_kind_of Kgio::Socket, b
@@ -57,7 +60,7 @@ module LibServerAccept
   def test_blocking_accept_with_nonblock_socket
     @srv.nonblock = true
     t0 = Time.now
-    pid = fork { sleep 1; a = client_connect; sleep }
+    pid = fork { sleep 1; a = client_connect; sleep; a.close }
     b = @srv.kgio_accept
     elapsed = Time.now - t0
     assert_kind_of Kgio::Socket, b
@@ -67,7 +70,7 @@ module LibServerAccept
     assert elapsed >= 1, "elapsed: #{elapsed}"
 
     t0 = Time.now
-    pid = fork { sleep 6; a = client_connect; sleep }
+    pid = fork { sleep 6; a = client_connect; sleep; a.close }
     b = @srv.kgio_accept
     elapsed = Time.now - t0
     assert_kind_of Kgio::Socket, b
@@ -77,7 +80,7 @@ module LibServerAccept
     assert elapsed >= 6, "elapsed: #{elapsed}"
 
     t0 = Time.now
-    pid = fork { sleep 1; a = client_connect; sleep }
+    pid = fork { sleep 1; a = client_connect; sleep; a.close }
     b = @srv.kgio_accept
     elapsed = Time.now - t0
     assert_kind_of Kgio::Socket, b

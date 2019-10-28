@@ -166,6 +166,7 @@ module LibReadWriteTest
       rescue EOFError
         break
       rescue => e
+        warn "#{e.message} (#{e.class})"
       end while true
       dig.hexdigest
     end
@@ -203,6 +204,7 @@ module LibReadWriteTest
       rescue EOFError
         break
       rescue => e
+        warn "#{e.message} (#{e.class})"
       end while true
       dig.hexdigest
     end
