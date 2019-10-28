@@ -60,7 +60,7 @@ doc:: .document .olddoc.yml $(pkg_extra) $(PLACEHOLDERS)
 	-find lib -type f -name '*.rbc' -exec rm -f '{}' ';'
 	-find ext -type f -name '*.rbc' -exec rm -f '{}' ';'
 	$(RM) -r doc
-	$(RDOC) -f oldweb
+	$(RDOC) -f dark216
 	$(OLDDOC) merge
 	install -m644 COPYING doc/COPYING
 	install -m644 NEWS doc/NEWS
