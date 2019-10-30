@@ -30,33 +30,35 @@ class TestAcceptClass < Test::Unit::TestCase
     @host = ENV["TEST_HOST"] || '127.0.0.1'
     @srv = Kgio::TCPServer.new(@host, 0)
     @port = @srv.addr[1]
+    socks = []
 
     Kgio.accept_class = Kgio::TCPSocket
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     assert_instance_of Kgio::TCPSocket, @srv.kgio_accept
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     IO.select([@srv])
     assert_instance_of Kgio::TCPSocket, @srv.kgio_tryaccept
 
     Kgio.accept_class = nil
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     assert_instance_of Kgio::Socket, @srv.kgio_accept
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     IO.select([@srv])
     assert_instance_of Kgio::Socket, @srv.kgio_tryaccept
 
     Kgio.accept_class = Kgio::UNIXSocket
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     assert_instance_of Kgio::UNIXSocket, @srv.kgio_accept
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     IO.select([@srv])
     assert_instance_of Kgio::UNIXSocket, @srv.kgio_tryaccept
 
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     assert_instance_of FooSocket, @srv.kgio_accept(FooSocket)
 
-    client = TCPSocket.new(@host, @port)
+    socks << TCPSocket.new(@host, @port)
     IO.select([@srv])
     assert_instance_of FooSocket, @srv.kgio_tryaccept(FooSocket)
+    socks.each(&:close)
   end
 end

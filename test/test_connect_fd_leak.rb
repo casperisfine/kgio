@@ -13,5 +13,6 @@ class TestConnectFDLeak < Test::Unit::TestCase
       sock = Kgio::UNIXSocket.new(path)
     rescue Errno::ENOENT
     end while (nr += 1) < 10000
+    sock.close
   end
 end

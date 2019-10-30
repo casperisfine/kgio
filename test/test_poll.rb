@@ -43,7 +43,6 @@ class TestPoll < Test::Unit::TestCase
   end
 
   def test_poll_close
-    foo = nil
     thr = Thread.new { sleep 0.100; @wr.close }
     t0 = Time.now
     res = Kgio.poll({@rd => Kgio::POLLIN})
@@ -55,7 +54,6 @@ class TestPoll < Test::Unit::TestCase
 
   def test_signal_close
     orig = trap(:USR1) { @rd.close }
-    res = nil
     thr = Thread.new { sleep 0.100; Process.kill(:USR1, $$) }
     t0 = Time.now
     assert_raises(IOError) do
@@ -65,8 +63,8 @@ class TestPoll < Test::Unit::TestCase
     diff = Time.now - t0
     thr.join
     assert diff >= 0.010, "diff=#{diff}"
-    ensure
-      trap(:USR1, orig)
+  ensure
+    trap(:USR1, orig)
   end
 
   def test_poll_EINTR
@@ -83,8 +81,8 @@ class TestPoll < Test::Unit::TestCase
     assert_nil res
     assert diff >= 1.0, "diff=#{diff}"
     assert ok
-    ensure
-      trap(:USR1, orig)
+  ensure
+    trap(:USR1, orig)
   end
 
   def test_poll_signal_torture

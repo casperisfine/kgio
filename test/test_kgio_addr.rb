@@ -15,5 +15,6 @@ class TestKgioAddr < Test::Unit::TestCase
     s = accepted.kgio_addr!
     assert_equal addr, s
     assert_equal addr, accepted.instance_variable_get(:@kgio_addr)
+    client.close
   end
 end
