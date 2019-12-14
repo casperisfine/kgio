@@ -37,6 +37,8 @@ class TestKgioSyssend < Test::Unit::TestCase
     # blocking
     th = Thread.new { loop { acc.kgio_syssend("ZZZZ", 0) } }
     assert_nil th.join(0.1)
+    th.kill
+    assert th.join(10), 'thread should be killed'
   ensure
     [ srv, acc, client ].each { |io| io.close if io }
   end
