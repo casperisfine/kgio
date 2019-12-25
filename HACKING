@@ -2,9 +2,6 @@
 
 === Documentation
 
-We use the latest version of {olddoc}[https://80x24.org/olddoc/] as
-much as possible.
-
 Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
