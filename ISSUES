@@ -9,10 +9,6 @@ and {documentation}[https://bogomips.org/kgio/].
 * Quote only the relevant portions of the message you're replying to
 * Do not send any HTML mail at all
 
-If your issue is of a sensitive nature or you're just shy in public,
-then feel free to email us privately at mailto:kgio@bogomips.org
-instead and your issue will be handled discreetly.
-
 If you don't get a response within a few days, we may have forgotten
 about it so feel free to ask again.
 
@@ -26,7 +22,6 @@ guidelines for patch submission.
 
 * subscribe: mailto:kgio-public+subscribe@bogomips.org
 * post: mailto:kgio-public@bogomips.org
-* private: mailto:kgio@bogomips.org
 
 == Mailing List Archives
 
