@@ -6,7 +6,7 @@ Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
 When referencing mailing list posts, use
-<tt>https://bogomips.org/kgio-public/$MESSAGE_ID/</tt> if possible
+<tt>https://yhbt.net/kgio-public/$MESSAGE_ID/</tt> if possible
 Message-ID remains searchable even if the archive becomes unavailable.
 
 === Code Compatibility
@@ -25,7 +25,7 @@ characters wide) and NOT the indentation style of Matz Ruby.
 
 Contributions are welcome in the form of patches, pull requests, code
 review, testing, documentation, user support or any other feedback.  The
-{kgio mailing list}[mailto:kgio-public@bogomips.org] is the
+{kgio mailing list}[mailto:kgio-public@yhbt.net] is the
 central coordination point for all user and developer feedback and bug
 reports.
 

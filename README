@@ -39,13 +39,13 @@ You may install it via RubyGems.org:
 You can get the latest source via git from the following locations
 (these versions may not be stable):
 
-  git://bogomips.org/kgio.git
+  git://yhbt.net/kgio.git
   git://repo.or.cz/kgio.git (mirror)
 
 You may browse the code from the web and download the latest snapshot
 tarballs here:
 
-* https://bogomips.org/kgio.git
+* https://yhbt.net/kgio.git
 * http://repo.or.cz/w/kgio.git (gitweb)
 
 See the HACKING guide on how to contribute and build prerelease gems
@@ -55,7 +55,7 @@ from git.
 
 All feedback (bug reports, user/development dicussion, patches, pull
 requests) go to the mailing list/newsgroup.  See the ISSUES document for
-information on the {kgio mailing list}[mailto:kgio-public@bogomips.org]
+information on the {kgio mailing list}[mailto:kgio-public@yhbt.net]
 
 For the latest on kgio releases, you may check our NEWS page (and
 subscribe to our Atom feed).

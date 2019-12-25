@@ -1,9 +1,9 @@
 ---
-cgit_url: https://bogomips.org/kgio.git
-git_url: git://bogomips.org/kgio.git
-ml_url: https://bogomips.org/kgio-public/
-rdoc_url: https://bogomips.org/kgio/
-public_email: kgio-public@bogomips.org
+cgit_url: https://yhbt.net/kgio.git
+git_url: git://yhbt.net/kgio.git
+ml_url: https://yhbt.net/kgio-public/
+rdoc_url: https://yhbt.net/kgio/
+public_email: kgio-public@yhbt.net
 noindex:
 - LATEST
 - TODO

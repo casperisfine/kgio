@@ -1,9 +1,9 @@
 = Issues
 
-The kgio {mailing list}[mailto:kgio-public@bogomips.org] is the best
+The kgio {mailing list}[mailto:kgio-public@yhbt.net] is the best
 place to report bugs, submit patches and/or obtain support after you
-have searched the mailing list archives at https://bogomips.org/kgio-public/
-and {documentation}[https://bogomips.org/kgio/].
+have searched the mailing list archives at https://yhbt.net/kgio-public/
+and {documentation}[https://yhbt.net/kgio/].
 
 * Do not {top post}[http://catb.org/jargon/html/T/top-post.html] in replies
 * Quote only the relevant portions of the message you're replying to
@@ -20,10 +20,10 @@ guidelines for patch submission.
 
 == Mailing List Info
 
-* subscribe: mailto:kgio-public+subscribe@bogomips.org
-* post: mailto:kgio-public@bogomips.org
+* subscribe: mailto:kgio-public+subscribe@yhbt.net
+* post: mailto:kgio-public@yhbt.net
 
 == Mailing List Archives
 
-* https://bogomips.org/kgio-public/
+* https://yhbt.net/kgio-public/
 * nntp://news.public-inbox.org/inbox.comp.lang.ruby.kgio

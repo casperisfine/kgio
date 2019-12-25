@@ -4,7 +4,7 @@ manifest = File.readlines('.manifest').map! { |x| x.chomp! }
 Gem::Specification.new do |s|
   s.name = %q{kgio}
   s.version = ENV["VERSION"].dup
-  s.homepage = 'https://bogomips.org/kgio/'
+  s.homepage = 'https://yhbt.net/kgio/'
   s.authors = ['kgio hackers']
   s.description = <<EOF
 This is a legacy project, do not use it for new projects.  Ruby
@@ -12,7 +12,7 @@ This is a legacy project, do not use it for new projects.  Ruby
 non-blocking I/O methods for Ruby without raising exceptions on
 EAGAIN and EINPROGRESS.
 EOF
-  s.email = %q{kgio-public@bogomips.org}
+  s.email = %q{kgio-public@yhbt.net}
   s.extra_rdoc_files = IO.readlines('.document').map!(&:chomp!).keep_if do |f|
     File.exist?(f)
   end
