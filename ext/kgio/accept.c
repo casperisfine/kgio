@@ -498,9 +498,12 @@ void init_kgio_accept(void)
 	rb_define_const(mKgio, "SOCK_CLOEXEC", INT2NUM(SOCK_CLOEXEC));
 
 	localhost = rb_const_get(mKgio, rb_intern("LOCALHOST"));
+	rb_gc_register_mark_object(localhost);
 	cKgio_Socket = rb_const_get(mKgio, rb_intern("Socket"));
+	rb_gc_register_mark_object(cKgio_Socket);
 	cClientSocket = cKgio_Socket;
 	mSocketMethods = rb_const_get(mKgio, rb_intern("SocketMethods"));
+	rb_gc_register_mark_object(mSocketMethods);
 
 	rb_define_method(mSocketMethods, "kgio_addr!", addr_bang, 0);
 
