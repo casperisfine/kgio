@@ -23,11 +23,12 @@ characters wide) and NOT the indentation style of Matz Ruby.
 
 == Contributing
 
-Contributions are welcome in the form of patches, pull requests, code
-review, testing, documentation, user support or any other feedback.  The
-{kgio mailing list}[mailto:kgio-public@yhbt.net] is the
-central coordination point for all user and developer feedback and bug
-reports.
+Contributions are welcome in the form of patches, pull requests
+(format email with "git request-pull"), code review, testing,
+documentation, user support or any other feedback.
+<mailto:kgio-public@yhbt.net> <https://yhbt.net/kgio-public/> is the
+current coordination point for all user and developer feedback and
+bug reports (domain is subject to change since ICANN cannot be trusted).
 
 === Submitting Patches
 
