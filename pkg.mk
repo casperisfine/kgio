@@ -127,7 +127,8 @@ publish_doc:
 	-git set-file-times
 	$(MAKE) doc
 	$(MAKE) doc_gz
-	$(RSYNC) -av doc/ $(RSYNC_DEST)/
+	$(RSYNC) -av doc/ $(RSYNC_DEST)/ \
+		--exclude index.html* --exclude created.rid*
 	git ls-files | xargs touch
 endif
 
