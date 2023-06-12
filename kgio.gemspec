@@ -1,9 +1,9 @@
-ENV["VERSION"] or abort "VERSION= must be specified"
-manifest = File.readlines('.manifest').map! { |x| x.chomp! }
+manifest = File.exist?('.manifest') ?
+  IO.readlines('.manifest').map!(&:chomp!) : `git ls-files`.split("\n")
 
 Gem::Specification.new do |s|
   s.name = %q{kgio}
-  s.version = ENV["VERSION"].dup
+  s.version = "2.11.4"
   s.homepage = 'https://yhbt.net/kgio/'
   s.authors = ['kgio hackers']
   s.description = <<EOF
