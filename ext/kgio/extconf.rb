@@ -7,6 +7,7 @@ unless have_macro('CLOCK_MONOTONIC', 'time.h')
 end
 have_type('clockid_t', 'time.h')
 have_library('rt', 'clock_gettime', 'time.h')
+have_func('rb_io_descriptor')
 
 # taken from ext/socket/extconf.rb in ruby/trunk:
 # OpenSolaris:
